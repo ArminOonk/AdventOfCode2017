@@ -15,5 +15,14 @@ for row in spreadsheet:
     for cell in row:
         txt += str(cell) + ' '
     print(txt)
-    checksum += max(row) - min(row)
+    for i in range(len(row)):
+        for j in range(i + 1, len(row)):
+            a = row[i]
+            b = row[j]
+            # print('testing: '+ str(a)+ ' ' + str(b))
+            if max([a, b]) % min([a, b]) == 0:
+                print('Evenly divible: ' + str(a) + ' ' + str(b))
+                checksum += int(max([a, b]) / min([a, b]))
+
+                # checksum += max(row) - min(row)
 print('Checksum: ' + str(checksum))
