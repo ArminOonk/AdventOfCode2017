@@ -20,6 +20,8 @@ nr_banks = len(memory)
 nr_cycles = 0
 history = []
 history.append(' '.join(map(str, memory)))
+repeat_state = ''
+first = 0
 
 while True:
     nr_cycles += 1
@@ -31,8 +33,16 @@ while True:
         memory[(index + i + 1) % nr_banks] += 1
 
     current_state = ' '.join(map(str, memory))
-    print(str(nr_cycles) + ': ' + current_state)
+    # print(str(nr_cycles) + ': ' + current_state)
 
-    if current_state in history:
+    if current_state in history and not repeat_state:
+        repeat_state = current_state
+        print('First time: ' + str(nr_cycles) + ': ' + current_state)
+        first = nr_cycles
+
+    if repeat_state == current_state and nr_cycles != first:
+        print('Second time: ' + str(nr_cycles) + ': ' + current_state)
+        print('diff: ' + str(nr_cycles-first))
         break
+
     history.append(current_state)
