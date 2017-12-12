@@ -1,6 +1,7 @@
 
 def get_score(txt):
     score = 0
+    removed_char = 0
     level = 0
 
     garbage = False
@@ -15,6 +16,8 @@ def get_score(txt):
                 ignore = True
             elif t == '>':
                 garbage = False
+            else:
+                removed_char += 1
         else:
             if t == '<':
                 garbage = True
@@ -24,7 +27,7 @@ def get_score(txt):
             if t == '}':
                 level -= 1
 
-    return score
+    return score, removed_char
 
 
 with open('day09Input.txt', 'r') as f:
@@ -32,8 +35,8 @@ with open('day09Input.txt', 'r') as f:
 
 for d in data:
     d = d.strip()
-    score = get_score(d)
+    score, removed_char = get_score(d)
     if len(d) < 80:
-        print('Input: ' + d + ' score: ' + str(score))
+        print('Input: ' + d + ' score: ' + str(score) + ' removed char: ' + str(removed_char))
     else:
-        print('score: ' + str(score))
+        print('score: ' + str(score) + ' removed char: ' + str(removed_char))
