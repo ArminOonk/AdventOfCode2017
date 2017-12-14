@@ -11,6 +11,23 @@ def get_fire_pos(t, r):
     return fire_loc
 
 
+def walk_firewall(t0, firewall, firewall_length):
+    p = 0
+    severity = 0
+    t = t0
+    hit_cnt = 0
+
+    while p <= firewall_length:
+        if p in firewall:
+            if get_fire_pos(t, firewall[p]) == 0:
+                severity += p * firewall[p]
+                hit_cnt += 1
+
+        p += 1
+        t += 1
+    return severity, hit_cnt
+
+
 firewall = dict()
 firewall_length = 0
 for d in data:
@@ -19,21 +36,18 @@ for d in data:
     if vals[0] > firewall_length:
         firewall_length = vals[0]
 
-print('Firewall length: ' + str(firewall_length))
-position = 0
-time = 0
-severity = 0
-
-while position <= firewall_length:
-    if position in firewall:
-        # print(str(time) + ': At firewall: ' + str(position))
-        fire_loc = get_fire_pos(time, firewall[position])
-
-        if fire_loc == 0:
-            # print('Hit')
-            severity += position * firewall[position]
-
-    position += 1
-    time += 1
-
+# print('Firewall length: ' + str(firewall_length))
+severity, _ = walk_firewall(0, firewall, firewall_length)
 print("End of firewall, severity: " + str(severity))
+
+start_time = 0
+while True:
+    _, hit = walk_firewall(t0=start_time, firewall=firewall, firewall_length=firewall_length)
+    if hit == 0:
+        break
+    start_time += 1
+
+    if start_time % 1000 == 0:
+        print("Time: " + str(start_time))
+
+print("Correct start time: " + str(start_time))
