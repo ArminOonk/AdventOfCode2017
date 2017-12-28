@@ -85,7 +85,7 @@ for d in data:
 
 iteration = 0
 
-for _ in range(0, 5):
+for _ in range(0, 18):
     vals = pat.split('/')
     image = []
     size = len(vals)
@@ -126,6 +126,6 @@ for _ in range(0, 5):
             ret.append(txt)
 
     pat = '/'.join(ret)
-    print(pat.replace('/', "\r\n"))
+    # print(pat.replace('/', "\r\n"))
     iteration += 1
     print('iteration: ' + str(iteration) + ' number on: ' + str(pat.count('#')))
