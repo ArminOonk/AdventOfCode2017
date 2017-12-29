@@ -39,13 +39,14 @@ cur_pos = [0, 0]
 def show(x0=-5, y0=-5, width=10, height=10):
     txt = ''
 
-    for y in range(y0+height, y0, -1):
+    for y in range(y0 + height, y0, -1):
         for x in range(x0, x0 + width):
             if coord_str([x, y]) in grid:
+                state = grid[coord_str([x, y])]
                 if cur_pos[0] == x and cur_pos[1] == y:
-                    txt += '[#]'
+                    txt += '[' + state + ']'
                 else:
-                    txt += ' # '
+                    txt += ' ' + state + ' '
             else:
                 if cur_pos[0] == x and cur_pos[1] == y:
                     txt += '[.]'
@@ -64,22 +65,29 @@ print('Size: ' + str(size))
 for y in range(len(data)):
     for x in range(len(data[y])):
         if data[y][x] == "#":
-            grid[coord_str([x-int(size/2), int(size/2) - y])] = True
+            grid[coord_str([x - int(size / 2), int(size / 2) - y])] = '#'
 
 for k, v in grid.items():
     print(k)
 
-for _ in range(10000):
+for _ in range(10000000):
     if coord_str(cur_pos) in grid:
-        print(str(_) + ' infected current dir: ' + cur_dir)
-        cur_dir = rot_right(cur_dir)  # infected
-        print('current dir: ' + cur_dir)
-        del grid[coord_str(cur_pos)]  # cleaned
+        state = grid[coord_str(cur_pos)]
+        if state == 'W':
+            grid[coord_str(cur_pos)] = '#' # weakend
+            infect_cnt += 1
+        elif state == '#':
+            cur_dir = rot_right(cur_dir)  # infected
+            grid[coord_str(cur_pos)] = 'F'
+        elif state == 'F':
+            cur_dir = rot_right(rot_right(cur_dir))
+            del grid[coord_str(cur_pos)]  # cleaned
+        else:
+            print('Illegal move')
+
     else:
-        print(str(_) + ' clean current dir: ' + cur_dir)
         cur_dir = rot_left(cur_dir)  # clean
-        grid[coord_str(cur_pos)] = True  # Infect
-        infect_cnt += 1
+        grid[coord_str(cur_pos)] = 'W'  # weakend
     move(cur_dir, cur_pos)
 
 print('Grid: ')
