@@ -3,6 +3,14 @@ with open('day23Input.txt', 'r') as f:
 
 cnt = 0
 registers = dict()
+registers['a'] = 1
+registers['b'] = 0
+registers['c'] = 0
+registers['d'] = 0
+registers['e'] = 0
+registers['f'] = 0
+registers['g'] = 0
+registers['h'] = 0
 mul_cnt = 0
 
 
@@ -14,13 +22,13 @@ def get_value(v):
             ret = registers[v]
         else:
             if v == 'a':
-                ret = 0
+                ret = 1
             else:
                 ret = 0
     return ret
 
 
-def set_value( reg, v):
+def set_value(reg, v):
     if reg not in registers:
         registers[reg] = 0
     registers[reg] = get_value(v)
@@ -28,6 +36,7 @@ def set_value( reg, v):
 
 try:
     while True:
+        jump_dist = 1
         vals = data[cnt].strip().split(' ')
         if vals[0] == 'set':
             set_value(vals[1], get_value(vals[2]))
@@ -38,16 +47,21 @@ try:
             mul_cnt += 1
         elif vals[0] == 'jnz':
             if get_value(vals[1]):
-                cnt += get_value(vals[2])
-                continue
+                jump_dist = get_value(vals[2])
         else:
             print('Illegal instruction')
             break
 
-        cnt += 1
+        print(str(cnt) + ' ' + data[cnt].strip())
+        for k, v in registers.items():
+            print(k + ': ' + str(v))
 
-except:
-    pass
+        input()
+        cnt += jump_dist
+
+except IndexError as ex:
+    print('Program finished: ' + str(ex))
+
 
 print("mul called: " + str(mul_cnt) + ' times')
 print("register h is: " + str(registers['h']))
