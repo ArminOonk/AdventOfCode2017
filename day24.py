@@ -83,7 +83,11 @@ while next_list:
             end_list.append(nl)
     next_list = new_next_list
 
-for el in end_list:
-    print(el.chain_str())
+# for el in end_list:
+#     print(el.chain_str())
 
 print('Strongest bridge: ' + str(max([x.chain_strength() for x in end_list])))
+longest_bridge = max([x.chain_length() for x in end_list])
+longest_bridge_list = [x for x in end_list if x.chain_length() == longest_bridge]
+
+print('Longest bridge: ' + str(longest_bridge) + ' max strength: ' + str(max([x.chain_strength() for x in longest_bridge_list])))
